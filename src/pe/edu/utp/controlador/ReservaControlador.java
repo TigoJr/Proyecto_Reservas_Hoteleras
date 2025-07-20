@@ -17,7 +17,7 @@ import pe.edu.utp.facade.ReservaFacade;
 import pe.edu.utp.modelo.Cliente;
 import pe.edu.utp.modelo.Habitacion;
 import pe.edu.utp.modelo.Reserva;
-import pe.edu.utp.vista.MenuPrincipal;
+import pe.edu.utp.vista.PrincipalVista;
 
 /**
  *
@@ -25,12 +25,12 @@ import pe.edu.utp.vista.MenuPrincipal;
  */
 public class ReservaControlador implements ActionListener {
 
-    private final MenuPrincipal vista;
+    private final PrincipalVista vista;
     private final ClienteDao clienteDao;
     private final HabitacionDao habitacionDao;
     private final ReservaDao reservaDao;
 
-    public ReservaControlador(MenuPrincipal vista, ClienteDao clienteDao, HabitacionDao habitacionDao, ReservaDao reservaDao) {
+    public ReservaControlador(PrincipalVista vista, ClienteDao clienteDao, HabitacionDao habitacionDao, ReservaDao reservaDao) {
         this.vista = vista;
         this.clienteDao = clienteDao;
         this.habitacionDao = habitacionDao;
@@ -39,29 +39,29 @@ public class ReservaControlador implements ActionListener {
         cargarClientes();
         cargarHabitacionesDisponibles();
         cargarReservasEnTabla();
-        vista.txtEstadoPR.setText("Confirmada");
+        vista.getTxtEstadoPR().setText("Confirmada");
     }
 
     private void cargarClientes() {
         List<Cliente> clientes = clienteDao.listarTodos();
-        vista.cbxClientePR.removeAllItems();
+        vista.getCbxClientePR().removeAllItems();
         for (Cliente c : clientes) {
-            vista.cbxClientePR.addItem(c.getIdCliente() + " - " + c.getNombre());
+            vista.getCbxClientePR().addItem(c.getIdCliente() + " - " + c.getNombre());
         }
     }
 
     private void cargarHabitacionesDisponibles() {
         List<Habitacion> habitaciones = habitacionDao.listarTodas();
-        vista.cbxHabitacionPR.removeAllItems();
+        vista.getCbxHabitacionPR().removeAllItems();
         for (Habitacion h : habitaciones) {
             if (h.getEstado().equalsIgnoreCase("Disponible")) {
-                vista.cbxHabitacionPR.addItem(h.getIdHabitacion() + " - Hab. " + h.getNumero());
+                vista.getCbxHabitacionPR().addItem(h.getIdHabitacion() + " - Hab. " + h.getNumero());
             }
         }
     }
 
     private void cargarReservasEnTabla() {
-        DefaultTableModel modelo = (DefaultTableModel) vista.tablaReservas.getModel();
+        DefaultTableModel modelo = (DefaultTableModel) vista.getTablaReservas().getModel();
         modelo.setRowCount(0);
 
         List<Reserva> reservas = reservaDao.listarTodas();
@@ -78,30 +78,30 @@ public class ReservaControlador implements ActionListener {
     }
 
     private void limpiarCampos() {
-        vista.txtEstadoPR.setText("Confirmada");
-        vista.txtFechaFinPR.setText("");
-        vista.txtFechaInicioPR.setText("");
+        vista.getTxtEstadoPR().setText("Confirmada");
+        vista.getTxtFechaFinPR().setText("");
+        vista.getTxtFechaInicioPR().setText("");
         cargarHabitacionesDisponibles();
         cargarClientes();
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == vista.btnReservarPR) {
+        if (e.getSource() == vista.getBtnReservarPR()) {
             registrarReserva();
-        } else if (e.getSource() == vista.btnLimpiarPR) {
+        } else if (e.getSource() == vista.getBtnLimpiarPR()) {
             limpiarCampos();
         }
     }
 
     private void registrarReserva() {
         try {
-            //Obtener IDs seleccionados desde los ComboBox
-            int idCliente = Integer.parseInt(vista.cbxClientePR.getSelectedItem().toString().split(" - ")[0]);
-            int idHabitacion = Integer.parseInt(vista.cbxHabitacionPR.getSelectedItem().toString().split(" - ")[0]);
+            int idCliente = Integer.parseInt(vista.getCbxClientePR().getSelectedItem().toString().split(" - ")[0]);
+            int idHabitacion = Integer.parseInt(vista.getCbxHabitacionPR().getSelectedItem().toString().split(" - ")[0]);
 
-            Date fechaInicio = java.sql.Date.valueOf(vista.txtFechaInicioPR.getText().trim());
-            Date fechaFin = java.sql.Date.valueOf(vista.txtFechaFinPR.getText().trim());
-            String estadoReserva = vista.txtEstadoPR.getText().trim();
+            Date fechaInicio = java.sql.Date.valueOf(vista.getTxtFechaInicioPR().getText().trim());
+            Date fechaFin = java.sql.Date.valueOf(vista.getTxtFechaFinPR().getText().trim());
+            String estadoReserva = vista.getTxtEstadoPR().getText().trim();
 
             Reserva r = new Reserva();
             r.setIdCliente(idCliente);
@@ -110,7 +110,6 @@ public class ReservaControlador implements ActionListener {
             r.setFechaFin(fechaFin);
             r.setEstado(estadoReserva);
 
-            //Usar el Facade
             ReservaFacade facade = new ReservaFacade(reservaDao, habitacionDao);
             boolean exito = facade.hacerReserva(r);
 
@@ -124,5 +123,5 @@ public class ReservaControlador implements ActionListener {
             JOptionPane.showMessageDialog(null, "Verifica los datos ingresados: " + ex.getMessage());
         }
     }
-
 }
+

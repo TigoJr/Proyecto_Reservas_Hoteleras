@@ -17,20 +17,20 @@ import pe.edu.utp.modelo.Reserva;
 import pe.edu.utp.observer.ArchivoPagoObserver;
 import pe.edu.utp.observer.PagoObservable;
 import pe.edu.utp.observer.VistaPagoObservable;
-import pe.edu.utp.vista.MenuPrincipal;
+import pe.edu.utp.vista.PrincipalVista;
 
 /**
  *
  * @author USUARIO
  */
-public class PagoControlador implements ActionListener{
+public class PagoControlador implements ActionListener {
 
-    private final MenuPrincipal vista;
+    private final PrincipalVista vista;
     private final PagoDao pagoDao;
     private final ReservaDao reservaDao;
     private final PagoObservable observable = new PagoObservable();
 
-    public PagoControlador(MenuPrincipal vista, PagoDao pagoDao, ReservaDao reservaDao) {
+    public PagoControlador(PrincipalVista vista, PagoDao pagoDao, ReservaDao reservaDao) {
         this.vista = vista;
         this.pagoDao = pagoDao;
         this.reservaDao = reservaDao;
@@ -43,16 +43,18 @@ public class PagoControlador implements ActionListener{
     }
 
     private void cargarReservas() {
-        vista.cbxReservaPP.removeAllItems();
+        vista.getCbxReservaPP().removeAllItems();
         List<Reserva> reservas = reservaDao.listarTodas();
 
         for (Reserva r : reservas) {
-            vista.cbxReservaPP.addItem(r.getIdReserva() + " - Cliente " + r.getIdCliente() + " | Hab. " + r.getIdHabitacion());
+            vista.getCbxReservaPP().addItem(
+                r.getIdReserva() + " - Cliente " + r.getIdCliente() + " | Hab. " + r.getIdHabitacion()
+            );
         }
     }
 
     private void cargarPagos() {
-        DefaultTableModel modelo = (DefaultTableModel) vista.tablaPagos.getModel();
+        DefaultTableModel modelo = (DefaultTableModel) vista.getTablaPagos().getModel();
         modelo.setRowCount(0);
 
         List<Pago> lista = pagoDao.listarTodos();
@@ -68,26 +70,31 @@ public class PagoControlador implements ActionListener{
     }
 
     private void limpiar() {
-        vista.txtMontoPP.setText("");
-        vista.txtFechaPP.setText("");
-        vista.cbxMetodoPP.setSelectedIndex(0);
+        vista.getTxtMontoPP().setText("");
+        vista.getTxtFechaPP().setText("");
+        vista.getCbxMetodoPP().setSelectedIndex(0);
         cargarReservas();
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == vista.btnRegistrarPP) {
+        Object fuente = e.getSource();
+
+        if (fuente == vista.getBtnRegistrarPP()) {
             registrarPago();
-        } else if (e.getSource() == vista.btnLimpiarPP) {
+        } else if (fuente == vista.getBtnLimpiarPP()) {
             limpiar();
         }
     }
 
     private void registrarPago() {
         try {
-            int idReserva = Integer.parseInt(vista.cbxReservaPP.getSelectedItem().toString().split(" - ")[0]);
-            double monto = Double.parseDouble(vista.txtMontoPP.getText().trim());
-            Date fecha = Date.valueOf(vista.txtFechaPP.getText().trim());
-            String metodo = vista.cbxMetodoPP.getSelectedItem().toString();
+            int idReserva = Integer.parseInt(
+                vista.getCbxReservaPP().getSelectedItem().toString().split(" - ")[0]
+            );
+            double monto = Double.parseDouble(vista.getTxtMontoPP().getText().trim());
+            Date fecha = Date.valueOf(vista.getTxtFechaPP().getText().trim());
+            String metodo = vista.getCbxMetodoPP().getSelectedItem().toString();
 
             Pago pago = new Pago();
             pago.setIdReserva(idReserva);
@@ -108,5 +115,5 @@ public class PagoControlador implements ActionListener{
             JOptionPane.showMessageDialog(null, "Verifica los datos: " + ex.getMessage());
         }
     }
-
 }
+

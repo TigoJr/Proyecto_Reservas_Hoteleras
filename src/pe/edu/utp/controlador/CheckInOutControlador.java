@@ -12,7 +12,7 @@ import pe.edu.utp.dao.HabitacionDao;
 import pe.edu.utp.modelo.Habitacion;
 import pe.edu.utp.state.EstadoDisponible;
 import pe.edu.utp.state.EstadoOcupado;
-import pe.edu.utp.vista.MenuPrincipal;
+import pe.edu.utp.vista.PrincipalVista;
 
 /**
  *
@@ -21,52 +21,54 @@ import pe.edu.utp.vista.MenuPrincipal;
 public class CheckInOutControlador implements ActionListener {
 
     private final HabitacionDao habitacionDao;
-    private final MenuPrincipal vista;
+    private final PrincipalVista vista;
 
-    public CheckInOutControlador(HabitacionDao habitacionDao, MenuPrincipal vista) {
+    public CheckInOutControlador(HabitacionDao habitacionDao, PrincipalVista vista) {
         this.habitacionDao = habitacionDao;
         this.vista = vista;
 
-        this.vista.btnCheckIn.addActionListener((ActionListener) this);
-        this.vista.btnCheckOut.addActionListener(this);
-        this.vista.btnRefrescar.addActionListener(this);
-        this.vista.cbxHabitacion.addActionListener(this);
+        vista.getBtnCheckIn().addActionListener(this);
+        vista.getBtnCheckOut().addActionListener(this);
+        vista.getBtnRefrescarPC().addActionListener(this);
+        vista.getCbxHabitacionPCK().addActionListener(this);
+
         cargarHabitaciones();
     }
 
     private void cargarHabitaciones() {
-        vista.cbxHabitacion.removeAllItems();
+        vista.getCbxHabitacionPCK().removeAllItems();
         List<Habitacion> lista = habitacionDao.listarTodas();
 
         for (Habitacion h : lista) {
             if (!h.getEstado().equalsIgnoreCase("Disponible")) {
-                vista.cbxHabitacion.addItem(h.getIdHabitacion() + " - Hab. " + h.getNumero() + " (" + h.getEstado() + ")");
+                vista.getCbxHabitacionPCK().addItem(h.getIdHabitacion() + " - Hab. " + h.getNumero() + " (" + h.getEstado() + ")");
             }
         }
 
-        vista.txtEstado.setText("");
+        vista.getTxtEstadoPCK().setText("");
         actualizarEstadoActual();
     }
 
     private void actualizarEstadoActual() {
-        if (vista.cbxHabitacion.getSelectedItem() != null) {
-            int id = Integer.parseInt(vista.cbxHabitacion.getSelectedItem().toString().split(" - ")[0]);
+        if (vista.getCbxHabitacionPCK().getSelectedItem() != null) {
+            int id = Integer.parseInt(
+                vista.getCbxHabitacionPCK().getSelectedItem().toString().split(" - ")[0]
+            );
             Habitacion h = habitacionDao.buscarPorId(id);
-            vista.txtEstado.setText(h.getEstado());
+            vista.getTxtEstadoPCK().setText(h.getEstado());
 
-            // Habilita o desactiva botones según el estado
             switch (h.getEstado().toLowerCase()) {
                 case "reservado" -> {
-                    vista.btnCheckIn.setEnabled(true);
-                    vista.btnCheckOut.setEnabled(false);
+                    vista.getBtnCheckIn().setEnabled(true);
+                    vista.getBtnCheckOut().setEnabled(false);
                 }
                 case "ocupado" -> {
-                    vista.btnCheckIn.setEnabled(false);
-                    vista.btnCheckOut.setEnabled(true);
+                    vista.getBtnCheckIn().setEnabled(false);
+                    vista.getBtnCheckOut().setEnabled(true);
                 }
                 default -> {
-                    vista.btnCheckIn.setEnabled(false);
-                    vista.btnCheckOut.setEnabled(false);
+                    vista.getBtnCheckIn().setEnabled(false);
+                    vista.getBtnCheckOut().setEnabled(false);
                 }
             }
         }
@@ -74,15 +76,12 @@ public class CheckInOutControlador implements ActionListener {
 
     private void hacerCheckIn() {
         int id = getHabitacionSeleccionada();
-        if (id == -1) {
-            return;
-        }
+        if (id == -1) return;
 
         Habitacion h = habitacionDao.buscarPorId(id);
-
         if (h.getEstado().equalsIgnoreCase("Reservado")) {
             h.setEstadoActual(new EstadoOcupado());
-            h.mostrarEstado(); // Imprime mensaje (para consola o logs)
+            h.mostrarEstado();
             h.setEstado("Ocupado");
             habitacionDao.actualizar(h);
 
@@ -95,12 +94,9 @@ public class CheckInOutControlador implements ActionListener {
 
     private void hacerCheckOut() {
         int id = getHabitacionSeleccionada();
-        if (id == -1) {
-            return;
-        }
+        if (id == -1) return;
 
         Habitacion h = habitacionDao.buscarPorId(id);
-
         if (h.getEstado().equalsIgnoreCase("Ocupado")) {
             h.setEstadoActual(new EstadoDisponible());
             h.mostrarEstado();
@@ -115,24 +111,27 @@ public class CheckInOutControlador implements ActionListener {
     }
 
     private int getHabitacionSeleccionada() {
-        if (vista.cbxHabitacion.getSelectedItem() == null) {
+        if (vista.getCbxHabitacionPCK().getSelectedItem() == null) {
             JOptionPane.showMessageDialog(null, "Selecciona una habitación.");
             return -1;
         }
 
-        return Integer.parseInt(vista.cbxHabitacion.getSelectedItem().toString().split(" - ")[0]);
+        return Integer.parseInt(
+            vista.getCbxHabitacionPCK().getSelectedItem().toString().split(" - ")[0]
+        );
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         Object fuente = e.getSource();
 
-        if (fuente == vista.btnRefrescar || fuente == vista.cbxHabitacion) {
+        if (fuente == vista.getBtnRefrescarPC() || fuente == vista.getCbxHabitacionPCK()) {
             actualizarEstadoActual();
-        } else if (fuente == vista.btnCheckIn) {
+        } else if (fuente == vista.getBtnCheckIn()) {
             hacerCheckIn();
-        } else if (fuente == vista.btnCheckOut) {
+        } else if (fuente == vista.getBtnCheckOut()) {
             hacerCheckOut();
         }
     }
 }
+

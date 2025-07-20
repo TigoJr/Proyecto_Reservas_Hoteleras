@@ -4,9 +4,8 @@
  */
 package pe.edu.utp.app;
 
-import javax.swing.JFrame;
-import pe.edu.utp.controlador.MenuPrincipalControlador;
-import pe.edu.utp.vista.MenuPrincipal;
+import pe.edu.utp.controlador.PrincipalControlador;
+import pe.edu.utp.vista.PrincipalVista;
 
 /**
  *
@@ -18,12 +17,11 @@ public class Principal {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        MenuPrincipal menu = new MenuPrincipal();
-        new MenuPrincipalControlador(menu);
+        PrincipalVista vista = new PrincipalVista();
+        new PrincipalControlador(vista);
 
-        menu.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        menu.setLocationRelativeTo(null);
-        menu.setVisible(true);
+        vista.setLocationRelativeTo(null);
+        vista.setVisible(true);
     }
 
 }
