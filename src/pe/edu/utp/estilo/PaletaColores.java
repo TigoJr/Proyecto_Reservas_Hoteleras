@@ -18,6 +18,8 @@ public class PaletaColores {
     public static final Color ACENTO_VIOLETA = new Color(82, 85, 116);   // #525574
     public static final Color ACENTO_VERDE = new Color(150, 179, 151);   // #96b397
     public static final Color VERDE_PASTEL = new Color(200, 207, 174);   // #c8cfae
+    
+    public static final Color FONDO_ALTERNO = new Color(99, 83, 116);
 
     // Colores de texto y fondo
     public static final Color TEXTO_PRIMARIO = Color.BLACK;

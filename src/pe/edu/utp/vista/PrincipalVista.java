@@ -4,7 +4,9 @@
  */
 package pe.edu.utp.vista;
 
-import java.awt.Color;
+import java.awt.Image;
+import java.net.URL;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -19,6 +21,23 @@ public class PrincipalVista extends javax.swing.JFrame {
         initComponents();
         setSize(1320, 760);
         setLocationRelativeTo(null);
+
+        try {
+            URL iconUrl = PrincipalVista.class.getResource("/pe/edu/utp/imagen/LUMIERE_RESERVAS_100x100.png");
+            if (iconUrl != null) {
+                ImageIcon icon = new ImageIcon(iconUrl);
+                setIconImage(icon.getImage());
+                
+                java.util.List<Image> icons = new java.util.ArrayList<>();
+                icons.add(icon.getImage());
+                icons.add(icon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH));
+                setIconImages(icons);
+            } else {
+                System.err.println("Icono no encontrado");
+            }
+        } catch (Exception e) {
+            System.err.println("Error al cargar el icono: " + e.getMessage());
+        }
     }
 
     public javax.swing.JButton getBtnBuscarPC() {
@@ -407,9 +426,12 @@ public class PrincipalVista extends javax.swing.JFrame {
         lblBtnCheck = new javax.swing.JLabel();
         panelContenido = new javax.swing.JPanel();
         panelTitulo = new javax.swing.JPanel();
+        lblImgLogo = new javax.swing.JLabel();
         lblTitulo = new javax.swing.JLabel();
+        lblSlogan = new javax.swing.JLabel();
         tabbedContenido = new javax.swing.JTabbedPane();
         panelInicio = new javax.swing.JPanel();
+        lblImgInicio = new javax.swing.JLabel();
         panelClientes = new javax.swing.JPanel();
         lblDniPC = new javax.swing.JLabel();
         lblIdPC = new javax.swing.JLabel();
@@ -663,19 +685,60 @@ public class PrincipalVista extends javax.swing.JFrame {
 
         panelContenido.setLayout(new javax.swing.BoxLayout(panelContenido, javax.swing.BoxLayout.Y_AXIS));
 
-        panelTitulo.setMaximumSize(new java.awt.Dimension(32767, 100));
-        panelTitulo.setMinimumSize(new java.awt.Dimension(0, 100));
-        panelTitulo.setPreferredSize(new java.awt.Dimension(811, 100));
-        java.awt.FlowLayout flowLayout1 = new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 15, 15);
-        flowLayout1.setAlignOnBaseline(true);
-        panelTitulo.setLayout(flowLayout1);
+        panelTitulo.setMaximumSize(new java.awt.Dimension(32767, 140));
+        panelTitulo.setMinimumSize(new java.awt.Dimension(0, 140));
+        panelTitulo.setPreferredSize(new java.awt.Dimension(811, 140));
+        panelTitulo.setLayout(new java.awt.GridBagLayout());
 
-        lblTitulo.setText("GESTIÓN DE RESERVAS HOTELERAS");
-        panelTitulo.add(lblTitulo);
+        lblImgLogo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblImgLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pe/edu/utp/imagen/LUMIERE_RESERVAS_100x100.png"))); // NOI18N
+        lblImgLogo.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 4, true));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(20, 20, 20, 20);
+        panelTitulo.add(lblImgLogo, gridBagConstraints);
+
+        lblTitulo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblTitulo.setText("LUMIÈRE RESERVAS");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(25, -5, 0, 25);
+        panelTitulo.add(lblTitulo, gridBagConstraints);
+
+        lblSlogan.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
+        lblSlogan.setForeground(new java.awt.Color(255, 255, 255));
+        lblSlogan.setText("La excelencia, perfectamente reservada.");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, -5, 0, 0);
+        panelTitulo.add(lblSlogan, gridBagConstraints);
 
         panelContenido.add(panelTitulo);
 
-        panelInicio.setLayout(new javax.swing.BoxLayout(panelInicio, javax.swing.BoxLayout.LINE_AXIS));
+        panelInicio.setLayout(new java.awt.GridBagLayout());
+
+        lblImgInicio.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblImgInicio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pe/edu/utp/imagen/img_inicio.png"))); // NOI18N
+        lblImgInicio.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 20);
+        panelInicio.add(lblImgInicio, gridBagConstraints);
+
         tabbedContenido.addTab("Inicio", panelInicio);
 
         panelClientes.setLayout(new java.awt.GridBagLayout());
@@ -1076,7 +1139,7 @@ public class PrincipalVista extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.weightx = 0.7;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(20, 50, 5, 5);
         panelReservas.add(cbxClientePR, gridBagConstraints);
 
@@ -1086,7 +1149,7 @@ public class PrincipalVista extends javax.swing.JFrame {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.weightx = 0.7;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 50, 5, 5);
         panelReservas.add(cbxHabitacionPR, gridBagConstraints);
 
@@ -1121,30 +1184,35 @@ public class PrincipalVista extends javax.swing.JFrame {
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panelReservas.add(lblEstadoPR, gridBagConstraints);
+
+        txtFechaInicioPR.setMinimumSize(new java.awt.Dimension(260, 28));
+        txtFechaInicioPR.setPreferredSize(new java.awt.Dimension(260, 28));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(20, 5, 2, 5);
         panelReservas.add(txtFechaInicioPR, gridBagConstraints);
+
+        txtFechaFinPR.setMinimumSize(new java.awt.Dimension(260, 28));
+        txtFechaFinPR.setPreferredSize(new java.awt.Dimension(260, 28));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(4, 5, 4, 5);
         panelReservas.add(txtFechaFinPR, gridBagConstraints);
 
         txtEstadoPR.setEditable(false);
+        txtEstadoPR.setMinimumSize(new java.awt.Dimension(260, 28));
+        txtEstadoPR.setPreferredSize(new java.awt.Dimension(260, 28));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(4, 5, 5, 5);
         panelReservas.add(txtEstadoPR, gridBagConstraints);
 
@@ -1207,7 +1275,7 @@ public class PrincipalVista extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.weightx = 0.7;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(20, 50, 5, 5);
         panelPagos.add(cbxReservaPP, gridBagConstraints);
 
@@ -1217,7 +1285,7 @@ public class PrincipalVista extends javax.swing.JFrame {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.weightx = 0.7;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 50, 5, 5);
         panelPagos.add(cbxMetodoPP, gridBagConstraints);
 
@@ -1242,20 +1310,24 @@ public class PrincipalVista extends javax.swing.JFrame {
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panelPagos.add(lblMontoPP, gridBagConstraints);
+
+        txtFechaPP.setMinimumSize(new java.awt.Dimension(260, 28));
+        txtFechaPP.setPreferredSize(new java.awt.Dimension(260, 28));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(20, 5, 2, 20);
         panelPagos.add(txtFechaPP, gridBagConstraints);
+
+        txtMontoPP.setMinimumSize(new java.awt.Dimension(260, 28));
+        txtMontoPP.setPreferredSize(new java.awt.Dimension(260, 28));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(4, 5, 5, 20);
         panelPagos.add(txtMontoPP, gridBagConstraints);
 
@@ -1318,7 +1390,6 @@ public class PrincipalVista extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(80, 50, 10, 5);
         panelCheck.add(lblHabitacionPCK, gridBagConstraints);
@@ -1329,7 +1400,6 @@ public class PrincipalVista extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(10, 50, 10, 5);
         panelCheck.add(lblEstadoActual, gridBagConstraints);
@@ -1339,7 +1409,6 @@ public class PrincipalVista extends javax.swing.JFrame {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(80, 10, 10, 50);
         panelCheck.add(cbxHabitacionPCK, gridBagConstraints);
@@ -1349,7 +1418,6 @@ public class PrincipalVista extends javax.swing.JFrame {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 50);
         panelCheck.add(txtEstadoPCK, gridBagConstraints);
@@ -1499,10 +1567,13 @@ public class PrincipalVista extends javax.swing.JFrame {
     private javax.swing.JLabel lblIdPC;
     private javax.swing.JLabel lblIdPH;
     private javax.swing.JLabel lblImagenInicio;
+    private javax.swing.JLabel lblImgInicio;
+    private javax.swing.JLabel lblImgLogo;
     private javax.swing.JLabel lblMontoPP;
     private javax.swing.JLabel lblNombrePC;
     private javax.swing.JLabel lblNumeroPH;
     private javax.swing.JLabel lblPrecioPH;
+    private javax.swing.JLabel lblSlogan;
     private javax.swing.JLabel lblTelefonoPC;
     private javax.swing.JLabel lblTipoPH;
     private javax.swing.JLabel lblTitulo;

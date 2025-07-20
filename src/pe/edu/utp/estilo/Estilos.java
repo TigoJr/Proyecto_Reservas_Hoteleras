@@ -17,6 +17,7 @@ import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import javax.swing.border.Border;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -32,7 +33,7 @@ public class Estilos {
     }
 
     public static void panelTitulo(JPanel panel) {
-        panel.setBackground(PaletaColores.PRIMARIO_OSCURO);
+        panel.setBackground(PaletaColores.FONDO_ALTERNO);
     }
 
     public static void panelLateral(JPanel panel) {
@@ -68,7 +69,7 @@ public class Estilos {
         label.setBackground(PaletaColores.PRIMARIO_CLARO);
         label.setForeground(PaletaColores.TEXTO_CLARO);
         label.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-            label.setHorizontalAlignment(SwingConstants.CENTER);
+        label.setHorizontalAlignment(SwingConstants.CENTER);
 
         boton.addMouseListener(new MouseAdapter() {
             @Override
@@ -193,21 +194,26 @@ public class Estilos {
         campo.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         campo.setForeground(PaletaColores.CAMPO_TEXTO);
         campo.setBackground(PaletaColores.CAMPO_FONDO);
-        campo.setBorder(BorderFactory.createLineBorder(PaletaColores.CAMPO_BORDE));
+
+        Border paddingBorder = BorderFactory.createEmptyBorder(4, 10, 4, 10);
+        Border lineBorder = BorderFactory.createLineBorder(PaletaColores.CAMPO_BORDE);
+        campo.setBorder(BorderFactory.createCompoundBorder(lineBorder, paddingBorder));
+
         campo.setCaretColor(PaletaColores.PRIMARIO_CLARO);
 
         campo.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
                 if (campo.isEnabled()) {
-                    campo.setBorder(BorderFactory.createLineBorder(PaletaColores.CAMPO_BORDE_FOCUS, 2));
+                    Border focusBorder = BorderFactory.createLineBorder(PaletaColores.CAMPO_BORDE_FOCUS, 2);
+                    campo.setBorder(BorderFactory.createCompoundBorder(focusBorder, paddingBorder));
                 }
             }
 
             @Override
             public void focusLost(FocusEvent e) {
                 if (campo.isEnabled()) {
-                    campo.setBorder(BorderFactory.createLineBorder(PaletaColores.CAMPO_BORDE));
+                    campo.setBorder(BorderFactory.createCompoundBorder(lineBorder, paddingBorder));
                 }
             }
         });
@@ -298,7 +304,7 @@ public class Estilos {
     public static void labelTitulo(JLabel label) {
         label.setFont(new Font("Segoe UI", Font.BOLD, 20));
         label.setForeground(PaletaColores.LABEL_TITULO);
-        label.setHorizontalAlignment(SwingConstants.CENTER);
+        label.setHorizontalAlignment(SwingConstants.LEFT);
     }
 
     public static void labelFormulario(JLabel label) {
