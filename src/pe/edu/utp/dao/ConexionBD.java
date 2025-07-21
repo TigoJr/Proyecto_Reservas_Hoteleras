@@ -18,7 +18,7 @@ public class ConexionBD {
 
     private final String URL = "jdbc:mysql://localhost:3306/reservas_de_hotel";
     private final String USUARIO = "root";
-    private final String CLAVE = "root"; // pon tu contraseña si tienes
+    private final String CLAVE = "root";
 
     private ConexionBD() {
         try {

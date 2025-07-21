@@ -34,7 +34,19 @@ public class PagoDao {
             ps.setString(4, pago.getMetodoP());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.out.println("Error al agregar pago: " + e.getMessage());
+            System.err.println("Error al agregar pago: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean existePagoParaReserva(int idReserva) {
+        String sql = "SELECT 1 FROM Pago WHERE idReserva = ?";
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setInt(1, idReserva);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            System.err.println("Error al verificar pago existente: " + e.getMessage());
             return false;
         }
     }
@@ -53,7 +65,7 @@ public class PagoDao {
                 lista.add(p);
             }
         } catch (SQLException e) {
-            System.out.println("Error al listar pagos: " + e.getMessage());
+            System.err.println("Error al listar pagos: " + e.getMessage());
         }
         return lista;
     }

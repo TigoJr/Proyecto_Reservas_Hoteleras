@@ -131,6 +131,10 @@ public class GestionClienteControlador implements ActionListener, MouseListener 
         c.setTelefono(vista.getTxtTelefonoPC().getText().trim());
         c.setEmail(vista.getTxtEmailPC().getText().trim());
 
+        if (!validarModificacion(c)) {
+            return;
+        }
+
         if (dao.actualizar(c)) {
             JOptionPane.showMessageDialog(null, "Cliente actualizado.");
             cargarTablaClientes();
@@ -187,6 +191,10 @@ public class GestionClienteControlador implements ActionListener, MouseListener 
             modelo.setTelefono(vista.getTxtTelefonoPC().getText().trim());
             modelo.setEmail(vista.getTxtEmailPC().getText().trim());
 
+            if (!validarEntrada(modelo)) {
+                return;
+            }
+
             if (dao.agregar(modelo)) {
                 JOptionPane.showMessageDialog(null, "Cliente registrado.");
                 limpiarCampos();
@@ -197,6 +205,82 @@ public class GestionClienteControlador implements ActionListener, MouseListener 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
         }
+    }
+
+    private boolean validarEntrada(Cliente c) {
+        if (c.getNombre().isBlank() || c.getDni().isBlank() || c.getTelefono().isBlank() || c.getEmail().isBlank()) {
+            JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios.");
+            return false;
+        }
+
+        if (!c.getDni().matches("\\d{8}")) {
+            JOptionPane.showMessageDialog(null, "El DNI debe tener exactamente 8 dígitos.");
+            return false;
+        }
+
+        if (!c.getTelefono().matches("\\d{9}")) {
+            JOptionPane.showMessageDialog(null, "El teléfono debe tener 9 dígitos.");
+            return false;
+        }
+
+        if (!c.getEmail().matches("^[\\w-.]+@[\\w-]+\\.[a-zA-Z]{2,}$")) {
+            JOptionPane.showMessageDialog(null, "El email no es válido.");
+            return false;
+        }
+
+        if (dao.dniExiste(c.getDni())) {
+            JOptionPane.showMessageDialog(null, "El DNI ya está registrado.");
+            return false;
+        }
+        if (dao.telefonoExiste(c.getTelefono())) {
+            JOptionPane.showMessageDialog(null, "El teléfono ya está registrado.");
+            return false;
+        }
+        if (dao.emailExiste(c.getEmail())) {
+            JOptionPane.showMessageDialog(null, "El email ya está registrado.");
+            return false;
+        }
+
+        return true;
+    }
+    
+    private boolean validarModificacion(Cliente c) {
+        if (c.getNombre().isBlank() || c.getDni().isBlank() || c.getTelefono().isBlank() || c.getEmail().isBlank()) {
+            JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios.");
+            return false;
+        }
+
+        if (!c.getDni().matches("\\d{8}")) {
+            JOptionPane.showMessageDialog(null, "El DNI debe tener exactamente 8 dígitos.");
+            return false;
+        }
+
+        if (!c.getTelefono().matches("\\d{9}")) {
+            JOptionPane.showMessageDialog(null, "El teléfono debe tener 9 dígitos.");
+            return false;
+        }
+
+        if (!c.getEmail().matches("^[\\w-.]+@[\\w-]+\\.[a-zA-Z]{2,}$")) {
+            JOptionPane.showMessageDialog(null, "El email no es válido.");
+            return false;
+        }
+
+        if (dao.dniExisteEnOtroCliente(c.getDni(), c.getIdCliente())) {
+            JOptionPane.showMessageDialog(null, "El DNI ya está registrado por otro cliente.");
+            return false;
+        }
+
+        if (dao.telefonoExisteEnOtroCliente(c.getTelefono(), c.getIdCliente())) {
+            JOptionPane.showMessageDialog(null, "El teléfono ya está registrado por otro cliente.");
+            return false;
+        }
+
+        if (dao.emailExisteEnOtroCliente(c.getEmail(), c.getIdCliente())) {
+            JOptionPane.showMessageDialog(null, "El email ya está registrado por otro cliente.");
+            return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -211,8 +295,19 @@ public class GestionClienteControlador implements ActionListener, MouseListener 
         }
     }
 
-    @Override public void mousePressed(MouseEvent e) {}
-    @Override public void mouseReleased(MouseEvent e) {}
-    @Override public void mouseEntered(MouseEvent e) {}
-    @Override public void mouseExited(MouseEvent e) {}
+    @Override
+    public void mousePressed(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+    }
 }

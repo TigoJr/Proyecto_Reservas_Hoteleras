@@ -7,11 +7,15 @@ package pe.edu.utp.controlador;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import pe.edu.utp.dao.HabitacionDao;
 import pe.edu.utp.dao.PagoDao;
 import pe.edu.utp.dao.ReservaDao;
+import pe.edu.utp.modelo.Habitacion;
 import pe.edu.utp.modelo.Pago;
 import pe.edu.utp.modelo.Reserva;
 import pe.edu.utp.observer.ArchivoPagoObserver;
@@ -28,28 +32,60 @@ public class PagoControlador implements ActionListener {
     private final PrincipalVista vista;
     private final PagoDao pagoDao;
     private final ReservaDao reservaDao;
+    private final HabitacionDao habitacionDao;
     private final PagoObservable observable = new PagoObservable();
+    private boolean bloqueado = false;
 
-    public PagoControlador(PrincipalVista vista, PagoDao pagoDao, ReservaDao reservaDao) {
+    public PagoControlador(PrincipalVista vista, PagoDao pagoDao, ReservaDao reservaDao, HabitacionDao habitacionDao) {
         this.vista = vista;
         this.pagoDao = pagoDao;
         this.reservaDao = reservaDao;
+        this.habitacionDao = habitacionDao;
 
+        agregarEventos();
         cargarReservas();
         cargarPagos();
 
         observable.agregarObservador(new VistaPagoObservable());
         observable.agregarObservador(new ArchivoPagoObserver());
+
+        if (vista.getCbxReservaPP().getItemCount() > 0) {
+            vista.getCbxReservaPP().setSelectedIndex(0);
+        }
+
+    }
+
+    private void agregarEventos() {
+        vista.getBtnRegistrarPP().addActionListener(this);
+        vista.getBtnLimpiarPP().addActionListener(this);
+        vista.getCbxReservaPP().addItemListener(e -> {
+            if (!bloqueado && e.getStateChange() == java.awt.event.ItemEvent.SELECTED) {
+                autocompletarFechaYMonto();
+            }
+        });
     }
 
     private void cargarReservas() {
         vista.getCbxReservaPP().removeAllItems();
         List<Reserva> reservas = reservaDao.listarTodas();
 
+        boolean alMenosUna = false;
+
         for (Reserva r : reservas) {
-            vista.getCbxReservaPP().addItem(
-                r.getIdReserva() + " - Cliente " + r.getIdCliente() + " | Hab. " + r.getIdHabitacion()
-            );
+            if (!pagoDao.existePagoParaReserva(r.getIdReserva())) {
+                String nombreCliente = reservaDao.obtenerNombreClientePorId(r.getIdCliente());
+                int numHabitacion = reservaDao.obtenerNumeroHabitacion(r.getIdHabitacion());
+                String txtCombo = r.getIdReserva() + " - " + nombreCliente + " | Hab. " + numHabitacion;
+                vista.getCbxReservaPP().addItem(txtCombo);
+                alMenosUna = true;
+            }
+        }
+
+        bloqueado = false;
+
+        if (alMenosUna) {
+            vista.getCbxReservaPP().setSelectedIndex(-1);
+            vista.getCbxReservaPP().setSelectedIndex(0);
         }
     }
 
@@ -69,13 +105,6 @@ public class PagoControlador implements ActionListener {
         }
     }
 
-    private void limpiar() {
-        vista.getTxtMontoPP().setText("");
-        vista.getTxtFechaPP().setText("");
-        vista.getCbxMetodoPP().setSelectedIndex(0);
-        cargarReservas();
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         Object fuente = e.getSource();
@@ -87,10 +116,17 @@ public class PagoControlador implements ActionListener {
         }
     }
 
+    private void limpiar() {
+        vista.getTxtMontoPP().setText("");
+        vista.getTxtFechaPP().setText("");
+        vista.getCbxMetodoPP().setSelectedIndex(0);
+        cargarReservas();
+    }
+
     private void registrarPago() {
         try {
             int idReserva = Integer.parseInt(
-                vista.getCbxReservaPP().getSelectedItem().toString().split(" - ")[0]
+                    vista.getCbxReservaPP().getSelectedItem().toString().split(" - ")[0]
             );
             double monto = Double.parseDouble(vista.getTxtMontoPP().getText().trim());
             Date fecha = Date.valueOf(vista.getTxtFechaPP().getText().trim());
@@ -115,5 +151,55 @@ public class PagoControlador implements ActionListener {
             JOptionPane.showMessageDialog(null, "Verifica los datos: " + ex.getMessage());
         }
     }
-}
 
+    private void autocompletarFechaYMonto() {
+        try {
+            int idReserva = Integer.parseInt(vista.getCbxReservaPP().getSelectedItem().toString().split(" - ")[0]);
+            Reserva r = reservaDao.buscarPorId(idReserva);
+
+            if (r == null) {
+                System.err.println("Reserva no encontrada.");
+                return;
+            }
+            Habitacion h = habitacionDao.buscarPorId(r.getIdHabitacion());
+
+            if (h == null) {
+                System.err.println("No se encontró la habitación en la BD.");
+                return;
+            }
+
+            if (r.getFechaInicio() == null || r.getFechaFin() == null || r.getFechaReserva() == null) {
+                System.out.println("Alguna de las fechas está vacia");
+                if (r.getFechaInicio() == null) {
+                    System.err.println(" - Inicio: " + r.getFechaInicio());
+                }
+                if (r.getFechaFin() == null) {
+                    System.err.println(" - Fin: " + r.getFechaFin());
+                }
+                if (r.getFechaReserva() == null) {
+                    System.err.println(" - Reserva: " + r.getFechaReserva());
+                }
+                return;
+            }
+            LocalDate fechaInicio = ((java.sql.Date) r.getFechaInicio()).toLocalDate();
+            LocalDate fechaFin = ((java.sql.Date) r.getFechaFin()).toLocalDate();
+
+            long dias = ChronoUnit.DAYS.between(fechaInicio, fechaFin);
+            if (dias <= 0) {
+                dias = 1;
+            }
+
+            double monto = dias * h.getPrecio();
+
+            vista.getTxtFechaPP().setText(r.getFechaReserva().toString());
+            vista.getTxtFechaPP().setEditable(false);
+
+            vista.getTxtMontoPP().setText(String.format("%.2f", monto));
+
+        } catch (Exception ex) {
+            System.err.println("Error al autocompletar fecha y monto: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+
+}

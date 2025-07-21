@@ -65,7 +65,7 @@ public class PrincipalControlador implements ActionListener {
         new GestionHabitacionControlador(habitacionDao, vista);
         new ReservaControlador(vista, clienteDao, habitacionDao, reservaDao);
         new GestionClienteControlador(clienteDao, cliente, vista);
-        new PagoControlador(vista, pagoDao, reservaDao);
+        new PagoControlador(vista, pagoDao, reservaDao, habitacionDao);
         new CheckInOutControlador(habitacionDao, vista);
     }
 
@@ -170,7 +170,7 @@ public class PrincipalControlador implements ActionListener {
             vista.getTxtIdPH(), vista.getTxtIdPH(),
             vista.getTxtNombrePC(), vista.getTxtNumeroPH(),
             vista.getTxtPrecioPH(), vista.getTxtTelefonoPC(),
-            vista.getTxtMontoPP()
+            vista.getTxtMontoPP(), vista.getTxtFechaReservaPR()
         };
 
         for (JTextField campo : campos) {
@@ -208,7 +208,7 @@ public class PrincipalControlador implements ActionListener {
             vista.getLblFechaInicioPR(), vista.getLblFechaPP(), vista.getLblHabitacionPCK(),
             vista.getLblIdPC(), vista.getLblIdPH(), vista.getLblMontoPP(), vista.getLblNombrePC(),
             vista.getLblNumeroPH(), vista.getLblPrecioPH(), vista.getLblTelefonoPC(),
-            vista.getLblTipoPH()
+            vista.getLblTipoPH(), vista.getLblFechaReservaPR()
         };
         for (JLabel lbl : labelsFormularios) {
             Estilos.labelFormulario(lbl);

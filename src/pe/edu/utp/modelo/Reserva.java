@@ -17,19 +17,21 @@ public class Reserva {
     private Date fechaInicio;
     private Date fechaFin;
     private String estado;
+    private Date fechaReserva;
 
     public Reserva() {
     }
     
     
 
-    public Reserva(int idReserva, int idCliente, int idHabitacion, Date fechaInicio, Date fechaFin, String estado) {
+    public Reserva(int idReserva, int idCliente, int idHabitacion, Date fechaInicio, Date fechaFin, String estado, Date fechaReserva) {
         this.idReserva = idReserva;
         this.idCliente = idCliente;
         this.idHabitacion = idHabitacion;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.estado = estado;
+        this.fechaReserva = fechaReserva;
     }
 
     public int getIdReserva() {
@@ -79,5 +81,13 @@ public class Reserva {
     public void setEstado(String estado) {
         this.estado = estado;
     }    
+
+    public Date getFechaReserva() {
+        return fechaReserva;
+    }
+
+    public void setFechaReserva(Date fechaReserva) {
+        this.fechaReserva = fechaReserva;
+    }
     
 }

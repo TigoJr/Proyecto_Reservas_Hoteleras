@@ -35,7 +35,6 @@ public class GestionHabitacionControlador implements ActionListener, MouseListen
     }
 
     private void agregarEventos() {
-
         vista.getBtnGuardarPH().addActionListener(this);
         vista.getBtnModificarPH().addActionListener(this);
         vista.getBtnEliminarPH().addActionListener(this);
@@ -196,7 +195,6 @@ public class GestionHabitacionControlador implements ActionListener, MouseListen
         }
     }
 
-    // Métodos vacíos de MouseListener obligatorios
     @Override
     public void mousePressed(MouseEvent e) {
     }

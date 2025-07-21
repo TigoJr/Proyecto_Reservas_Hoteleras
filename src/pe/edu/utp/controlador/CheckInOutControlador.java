@@ -9,7 +9,9 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.JOptionPane;
 import pe.edu.utp.dao.HabitacionDao;
+import pe.edu.utp.dao.ReservaDao;
 import pe.edu.utp.modelo.Habitacion;
+import pe.edu.utp.modelo.Reserva;
 import pe.edu.utp.state.EstadoDisponible;
 import pe.edu.utp.state.EstadoOcupado;
 import pe.edu.utp.vista.PrincipalVista;
@@ -26,22 +28,27 @@ public class CheckInOutControlador implements ActionListener {
     public CheckInOutControlador(HabitacionDao habitacionDao, PrincipalVista vista) {
         this.habitacionDao = habitacionDao;
         this.vista = vista;
-
+                
+        agregarEventos();
+        cargarHabitaciones();
+    }
+    
+    private void agregarEventos() {
         vista.getBtnCheckIn().addActionListener(this);
         vista.getBtnCheckOut().addActionListener(this);
         vista.getBtnRefrescarPC().addActionListener(this);
         vista.getCbxHabitacionPCK().addActionListener(this);
-
-        cargarHabitaciones();
     }
 
     private void cargarHabitaciones() {
         vista.getCbxHabitacionPCK().removeAllItems();
-        List<Habitacion> lista = habitacionDao.listarTodas();
+        List<Reserva> reservasPagadas = new ReservaDao().listarReservasPagadas();
 
-        for (Habitacion h : lista) {
+        for (Reserva r : reservasPagadas) {
+            Habitacion h = habitacionDao.buscarPorId(r.getIdHabitacion());
             if (!h.getEstado().equalsIgnoreCase("Disponible")) {
-                vista.getCbxHabitacionPCK().addItem(h.getIdHabitacion() + " - Hab. " + h.getNumero() + " (" + h.getEstado() + ")");
+                String texto = h.getIdHabitacion() + " - Hab. " + h.getNumero() + " (" + h.getEstado() + ")";
+                vista.getCbxHabitacionPCK().addItem(texto);
             }
         }
 

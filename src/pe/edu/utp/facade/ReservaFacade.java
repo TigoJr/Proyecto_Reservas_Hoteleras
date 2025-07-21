@@ -27,7 +27,6 @@ public class ReservaFacade {
 
     public boolean hacerReserva(Reserva reserva) {
         try {
-            // 1. Registrar la reserva
             boolean insertado = reservaDao.agregar(reserva);
 
             if (!insertado) {
@@ -35,7 +34,6 @@ public class ReservaFacade {
                 return false;
             }
 
-            // 2. Cambiar estado de la habitación a "Reservado"
             Habitacion h = habitacionDao.buscarPorId(reserva.getIdHabitacion());
             h.setEstadoActual(new EstadoReservada());
             h.mostrarEstado();

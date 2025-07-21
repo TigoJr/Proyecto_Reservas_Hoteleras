@@ -219,6 +219,10 @@ public class PrincipalVista extends javax.swing.JFrame {
     public javax.swing.JLabel getLblFechaInicioPR() {
         return lblFechaInicioPR;
     }
+    
+    public javax.swing.JLabel getLblFechaReservaPR() {
+        return lblFechaReservaPR;
+    }
 
     public javax.swing.JLabel getLblFechaPP() {
         return lblFechaPP;
@@ -367,6 +371,10 @@ public class PrincipalVista extends javax.swing.JFrame {
     public javax.swing.JTextField getTxtFechaInicioPR() {
         return txtFechaInicioPR;
     }
+    
+    public javax.swing.JTextField getTxtFechaReservaPR() {
+        return txtFechaReservaPR;
+    }
 
     public javax.swing.JTextField getTxtFechaPP() {
         return txtFechaPP;
@@ -476,9 +484,11 @@ public class PrincipalVista extends javax.swing.JFrame {
         lblFechaInicioPR = new javax.swing.JLabel();
         lblFechaFinPR = new javax.swing.JLabel();
         lblEstadoPR = new javax.swing.JLabel();
+        lblFechaReservaPR = new javax.swing.JLabel();
         txtFechaInicioPR = new javax.swing.JTextField();
         txtFechaFinPR = new javax.swing.JTextField();
         txtEstadoPR = new javax.swing.JTextField();
+        txtFechaReservaPR = new javax.swing.JTextField();
         btnLimpiarPR = new javax.swing.JButton();
         btnReservarPR = new javax.swing.JButton();
         scrollTablaReservas = new javax.swing.JScrollPane();
@@ -1137,6 +1147,7 @@ public class PrincipalVista extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.weightx = 1.0;
@@ -1147,6 +1158,7 @@ public class PrincipalVista extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.weightx = 1.0;
@@ -1156,7 +1168,7 @@ public class PrincipalVista extends javax.swing.JFrame {
         lblFechaInicioPR.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblFechaInicioPR.setText("Fecha de Inicio");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -1167,7 +1179,7 @@ public class PrincipalVista extends javax.swing.JFrame {
         lblFechaFinPR.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblFechaFinPR.setText("Fecha de Fin");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -1176,19 +1188,30 @@ public class PrincipalVista extends javax.swing.JFrame {
 
         lblEstadoPR.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblEstadoPR.setText("Estado");
+        lblEstadoPR.setMaximumSize(new java.awt.Dimension(100, 16));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 50, 5, 5);
         panelReservas.add(lblEstadoPR, gridBagConstraints);
+
+        lblFechaReservaPR.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblFechaReservaPR.setText("Fecha de Reserva");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelReservas.add(lblFechaReservaPR, gridBagConstraints);
 
         txtFechaInicioPR.setMinimumSize(new java.awt.Dimension(260, 28));
         txtFechaInicioPR.setPreferredSize(new java.awt.Dimension(260, 28));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -1198,7 +1221,7 @@ public class PrincipalVista extends javax.swing.JFrame {
         txtFechaFinPR.setMinimumSize(new java.awt.Dimension(260, 28));
         txtFechaFinPR.setPreferredSize(new java.awt.Dimension(260, 28));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -1206,19 +1229,31 @@ public class PrincipalVista extends javax.swing.JFrame {
         panelReservas.add(txtFechaFinPR, gridBagConstraints);
 
         txtEstadoPR.setEditable(false);
-        txtEstadoPR.setMinimumSize(new java.awt.Dimension(260, 28));
-        txtEstadoPR.setPreferredSize(new java.awt.Dimension(260, 28));
+        txtEstadoPR.setMaximumSize(new java.awt.Dimension(200, 2147483647));
+        txtEstadoPR.setMinimumSize(new java.awt.Dimension(200, 28));
+        txtEstadoPR.setPreferredSize(new java.awt.Dimension(200, 28));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(4, 5, 5, 5);
         panelReservas.add(txtEstadoPR, gridBagConstraints);
 
-        btnLimpiarPR.setText("LIMPIAR");
+        txtFechaReservaPR.setEditable(false);
+        txtFechaReservaPR.setMinimumSize(new java.awt.Dimension(260, 28));
+        txtFechaReservaPR.setPreferredSize(new java.awt.Dimension(260, 28));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(4, 5, 4, 5);
+        panelReservas.add(txtFechaReservaPR, gridBagConstraints);
+
+        btnLimpiarPR.setText("LIMPIAR");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -1228,7 +1263,7 @@ public class PrincipalVista extends javax.swing.JFrame {
 
         btnReservarPR.setText("RESERVAR");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -1257,7 +1292,7 @@ public class PrincipalVista extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
@@ -1432,7 +1467,7 @@ public class PrincipalVista extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(20, 0, 10, 75);
         panelCheck.add(btnCheckIn, gridBagConstraints);
 
-        btnCheckOut.setText("CHECK - ON");
+        btnCheckOut.setText("CHECK - OUT");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -1563,6 +1598,7 @@ public class PrincipalVista extends javax.swing.JFrame {
     private javax.swing.JLabel lblFechaFinPR;
     private javax.swing.JLabel lblFechaInicioPR;
     private javax.swing.JLabel lblFechaPP;
+    private javax.swing.JLabel lblFechaReservaPR;
     private javax.swing.JLabel lblHabitacionPCK;
     private javax.swing.JLabel lblIdPC;
     private javax.swing.JLabel lblIdPH;
@@ -1603,6 +1639,7 @@ public class PrincipalVista extends javax.swing.JFrame {
     private javax.swing.JTextField txtFechaFinPR;
     private javax.swing.JTextField txtFechaInicioPR;
     private javax.swing.JTextField txtFechaPP;
+    private javax.swing.JTextField txtFechaReservaPR;
     private javax.swing.JTextField txtIdPC;
     private javax.swing.JTextField txtIdPH;
     private javax.swing.JTextField txtMontoPP;

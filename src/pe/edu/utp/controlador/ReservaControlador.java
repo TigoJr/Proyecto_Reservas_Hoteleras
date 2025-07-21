@@ -6,6 +6,7 @@ package pe.edu.utp.controlador;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -35,13 +36,20 @@ public class ReservaControlador implements ActionListener {
         this.clienteDao = clienteDao;
         this.habitacionDao = habitacionDao;
         this.reservaDao = reservaDao;
-
+        
+        agregarEventos();
+        
         cargarClientes();
         cargarHabitacionesDisponibles();
         cargarReservasEnTabla();
         vista.getTxtEstadoPR().setText("Confirmada");
     }
-
+    
+    private void agregarEventos() {
+        vista.getBtnReservarPR().addActionListener(this);
+        vista.getBtnLimpiarPR().addActionListener(this);
+    }
+    
     private void cargarClientes() {
         List<Cliente> clientes = clienteDao.listarTodos();
         vista.getCbxClientePR().removeAllItems();
@@ -101,6 +109,18 @@ public class ReservaControlador implements ActionListener {
 
             Date fechaInicio = java.sql.Date.valueOf(vista.getTxtFechaInicioPR().getText().trim());
             Date fechaFin = java.sql.Date.valueOf(vista.getTxtFechaFinPR().getText().trim());
+            java.sql.Date fechaReservaHoy = java.sql.Date.valueOf(LocalDate.now());
+
+            if (fechaInicio.before(fechaReservaHoy)) {
+                JOptionPane.showMessageDialog(null, "La fecha de inicio no puede ser anterior a hoy.");
+                return;
+            }
+
+            if (!fechaFin.after(fechaInicio)) {
+                JOptionPane.showMessageDialog(null, "La fecha de fin debe ser posterior a la fecha de inicio.");
+                return;
+            }
+
             String estadoReserva = vista.getTxtEstadoPR().getText().trim();
 
             Reserva r = new Reserva();
@@ -109,6 +129,8 @@ public class ReservaControlador implements ActionListener {
             r.setFechaInicio(fechaInicio);
             r.setFechaFin(fechaFin);
             r.setEstado(estadoReserva);
+            r.setFechaReserva(fechaReservaHoy);
+            System.out.println("[Controlador] Fecha reserva seteada: " + fechaReservaHoy);
 
             ReservaFacade facade = new ReservaFacade(reservaDao, habitacionDao);
             boolean exito = facade.hacerReserva(r);
@@ -121,7 +143,8 @@ public class ReservaControlador implements ActionListener {
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Verifica los datos ingresados: " + ex.getMessage());
+            ex.printStackTrace();
         }
     }
-}
 
+}

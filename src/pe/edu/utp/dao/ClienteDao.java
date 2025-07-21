@@ -34,7 +34,7 @@ public class ClienteDao {
             ps.setString(4, cliente.getEmail());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.out.println("Error al agregar cliente: " + e.getMessage());
+            System.err.println("Error al agregar cliente: " + e.getMessage());
             return false;
         }
     }
@@ -53,7 +53,7 @@ public class ClienteDao {
                 lista.add(c);
             }
         } catch (SQLException e) {
-            System.out.println("Error al listar clientes: " + e.getMessage());
+            System.err.println("Error al listar clientes: " + e.getMessage());
         }
         return lista;
     }
@@ -68,7 +68,7 @@ public class ClienteDao {
             ps.setInt(5, cliente.getIdCliente());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.out.println("Error al actualizar cliente: " + e.getMessage());
+            System.err.println("Error al actualizar cliente: " + e.getMessage());
             return false;
         }
     }
@@ -79,7 +79,7 @@ public class ClienteDao {
             ps.setInt(1, idCliente);
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.out.println("Error al eliminar cliente: " + e.getMessage());
+            System.err.println("Error al eliminar cliente: " + e.getMessage());
             return false;
         }
     }
@@ -99,8 +99,61 @@ public class ClienteDao {
                 );
             }
         } catch (SQLException e) {
-            System.out.println("Error al buscar cliente: " + e.getMessage());
+            System.err.println("Error al buscar cliente: " + e.getMessage());
         }
         return null;
+    }
+
+    public boolean dniExiste(String dni) {
+        return existe("dni", dni);
+    }
+
+    public boolean telefonoExiste(String telefono) {
+        return existe("telefono", telefono);
+    }
+
+    public boolean emailExiste(String email) {
+        return existe("email", email);
+    }
+
+    private boolean existe(String campo, String valor) {
+        String sql = "SELECT COUNT(*) FROM cliente WHERE " + campo + " = ?";
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setString(1, valor);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean dniExisteEnOtroCliente(String dni, int idActual) {
+        return existeEnOtro("dni", dni, idActual);
+    }
+
+    public boolean telefonoExisteEnOtroCliente(String telefono, int idActual) {
+        return existeEnOtro("telefono", telefono, idActual);
+    }
+
+    public boolean emailExisteEnOtroCliente(String email, int idActual) {
+        return existeEnOtro("email", email, idActual);
+    }
+
+    private boolean existeEnOtro(String campo, String valor, int idActual) {
+        String sql = "SELECT COUNT(*) FROM cliente WHERE " + campo + " = ? AND idCliente <> ?";
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setString(1, valor);
+            ps.setInt(2, idActual);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

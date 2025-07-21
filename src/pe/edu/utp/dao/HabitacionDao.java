@@ -24,7 +24,7 @@ public class HabitacionDao {
     public HabitacionDao() {
         conexion = ConexionBD.getInstancia().getConexion();
     }
-       
+
     public boolean existeNumero(int numero) {
         String sql = "SELECT 1 FROM Habitacion WHERE numero = ?";
         try (PreparedStatement ps = conexion.prepareStatement(sql)) {
@@ -32,19 +32,19 @@ public class HabitacionDao {
             ResultSet rs = ps.executeQuery();
             return rs.next();
         } catch (SQLException e) {
-            System.out.println("Error al validar número: " + e.getMessage());
+            System.err.println("Error al validar número: " + e.getMessage());
             return true;
         }
     }
 
     public boolean agregar(Habitacion habitacion) {
         if (habitacion.getNumero() <= 0) {
-            System.out.println("Número de habitación inválido.");
+            System.err.println("Número de habitación inválido.");
             return false;
         }
 
         if (existeNumero(habitacion.getNumero())) {
-            System.out.println("❌ Ya existe una habitación con ese número.");
+            System.err.println("Ya existe una habitación con ese número.");
             return false;
         }
 
@@ -56,7 +56,7 @@ public class HabitacionDao {
             ps.setDouble(4, habitacion.getPrecio());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.out.println("Error al agregar habitación: " + e.getMessage());
+            System.err.println("Error al agregar habitación: " + e.getMessage());
             return false;
         }
     }
@@ -75,7 +75,7 @@ public class HabitacionDao {
                 lista.add(h);
             }
         } catch (SQLException e) {
-            System.out.println("Error al listar habitaciones: " + e.getMessage());
+            System.err.println("Error al listar habitaciones: " + e.getMessage());
         }
         return lista;
     }
@@ -83,12 +83,12 @@ public class HabitacionDao {
     public boolean actualizar(Habitacion habitacion) {
 
         if (habitacion.getNumero() <= 0) {
-            System.out.println("Número de habitación inválido.");
+            System.err.println("Número de habitación inválido.");
             return false;
         }
 
         if (existeNumero(habitacion.getNumero())) {
-            System.out.println("Ya existe una habitación con ese número.");
+            System.err.println("Ya existe una habitación con ese número.");
             return false;
         }
 
@@ -101,7 +101,7 @@ public class HabitacionDao {
             ps.setInt(5, habitacion.getIdHabitacion());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.out.println("Error al actualizar habitación: " + e.getMessage());
+            System.err.println("Error al actualizar habitación: " + e.getMessage());
             return false;
         }
     }
@@ -112,16 +112,19 @@ public class HabitacionDao {
             ps.setInt(1, idHabitacion);
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.out.println("Error al eliminar habitación: " + e.getMessage());
+            System.err.println("Error al eliminar habitación: " + e.getMessage());
             return false;
         }
     }
 
     public Habitacion buscarPorId(int idHabitacion) {
-        String sql = "SELECT * FROM Habitacion WHERE idHabitacion=?";
+        String sql = "SELECT * FROM Habitacion WHERE idHabitacion = ?";
+
         try (PreparedStatement ps = conexion.prepareStatement(sql)) {
             ps.setInt(1, idHabitacion);
+
             ResultSet rs = ps.executeQuery();
+
             if (rs.next()) {
                 return new Habitacion(
                         rs.getInt("idHabitacion"),
@@ -130,10 +133,18 @@ public class HabitacionDao {
                         rs.getString("estado"),
                         rs.getDouble("precio")
                 );
+            } else {
+                System.err.println("[DAO] No se encontró ninguna habitación con ese ID.");
             }
+
         } catch (SQLException e) {
-            System.out.println("Error al buscar habitación: " + e.getMessage());
+            System.err.println("[DAO] Error SQL al buscar habitación: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception ex) {
+            System.err.println("[DAO] Error inesperado al buscar habitación: " + ex.getMessage());
+            ex.printStackTrace();
         }
+
         return null;
     }
 }
