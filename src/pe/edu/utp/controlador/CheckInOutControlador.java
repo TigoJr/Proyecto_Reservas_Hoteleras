@@ -8,14 +8,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.JOptionPane;
-import pe.edu.utp.dao.HabitacionDAO;
-import pe.edu.utp.dao.ReservaDAO;
-import pe.edu.utp.factory.EstadoHabitacionFactory;
+import pe.edu.utp.dao.HabitacionDao;
+import pe.edu.utp.dao.ReservaDao;
 import pe.edu.utp.modelo.Habitacion;
 import pe.edu.utp.modelo.Reserva;
 import pe.edu.utp.state.EstadoDisponible;
-import pe.edu.utp.state.EstadoHabitacion;
-import pe.edu.utp.state.EstadoOcupada;
+import pe.edu.utp.state.EstadoOcupado;
 import pe.edu.utp.vista.PrincipalVista;
 
 /**
@@ -24,17 +22,17 @@ import pe.edu.utp.vista.PrincipalVista;
  */
 public class CheckInOutControlador implements ActionListener {
 
-    private final HabitacionDAO habitacionDao;
+    private final HabitacionDao habitacionDao;
     private final PrincipalVista vista;
 
-    public CheckInOutControlador(HabitacionDAO habitacionDao, PrincipalVista vista) {
+    public CheckInOutControlador(HabitacionDao habitacionDao, PrincipalVista vista) {
         this.habitacionDao = habitacionDao;
         this.vista = vista;
-
+                
         agregarEventos();
         cargarHabitaciones();
     }
-
+    
     private void agregarEventos() {
         vista.getBtnCheckIn().addActionListener(this);
         vista.getBtnCheckOut().addActionListener(this);
@@ -44,12 +42,12 @@ public class CheckInOutControlador implements ActionListener {
 
     private void cargarHabitaciones() {
         vista.getCbxHabitacionPCK().removeAllItems();
-        List<Reserva> reservasPagadas = new ReservaDAO().listarReservasPagadas();
+        List<Reserva> reservasPagadas = new ReservaDao().listarReservasPagadas();
 
         for (Reserva r : reservasPagadas) {
             Habitacion h = habitacionDao.buscarPorId(r.getIdHabitacion());
-            if (!h.getEstadoActual().getNombreEstado().equalsIgnoreCase("Disponible")) {
-                String texto = h.getIdHabitacion() + " - Hab. " + h.getNumero() + " (" + h.getEstadoActual().getNombreEstado() + ")";
+            if (!h.getEstado().equalsIgnoreCase("Disponible")) {
+                String texto = h.getIdHabitacion() + " - Hab. " + h.getNumero() + " (" + h.getEstado() + ")";
                 vista.getCbxHabitacionPCK().addItem(texto);
             }
         }
@@ -61,12 +59,12 @@ public class CheckInOutControlador implements ActionListener {
     private void actualizarEstadoActual() {
         if (vista.getCbxHabitacionPCK().getSelectedItem() != null) {
             int id = Integer.parseInt(
-                    vista.getCbxHabitacionPCK().getSelectedItem().toString().split(" - ")[0]
+                vista.getCbxHabitacionPCK().getSelectedItem().toString().split(" - ")[0]
             );
             Habitacion h = habitacionDao.buscarPorId(id);
-            vista.getTxtEstadoPCK().setText(h.getEstadoActual().getNombreEstado());
+            vista.getTxtEstadoPCK().setText(h.getEstado());
 
-            switch (h.getEstadoActual().getNombreEstado().toLowerCase()) {
+            switch (h.getEstado().toLowerCase()) {
                 case "reservado" -> {
                     vista.getBtnCheckIn().setEnabled(true);
                     vista.getBtnCheckOut().setEnabled(false);
@@ -85,19 +83,13 @@ public class CheckInOutControlador implements ActionListener {
 
     private void hacerCheckIn() {
         int id = getHabitacionSeleccionada();
-        if (id == -1) {
-            return;
-        }
+        if (id == -1) return;
 
         Habitacion h = habitacionDao.buscarPorId(id);
-        if (h.getEstadoActual().getNombreEstado().equalsIgnoreCase("Ocupada")) {
-            h.setEstadoActual(new EstadoOcupada());
+        if (h.getEstado().equalsIgnoreCase("Reservado")) {
+            h.setEstadoActual(new EstadoOcupado());
             h.mostrarEstado();
-
-            String estadoTexto = "Ocupada";
-            EstadoHabitacion estado = EstadoHabitacionFactory.crearEstado(estadoTexto);
-            h.setEstadoActual(estado);
-
+            h.setEstado("Ocupado");
             habitacionDao.actualizar(h);
 
             JOptionPane.showMessageDialog(null, "Check-In realizado. Habitación ahora está OCUPADA.");
@@ -109,18 +101,13 @@ public class CheckInOutControlador implements ActionListener {
 
     private void hacerCheckOut() {
         int id = getHabitacionSeleccionada();
-        if (id == -1) {
-            return;
-        }
+        if (id == -1) return;
 
         Habitacion h = habitacionDao.buscarPorId(id);
-        if (h.getEstadoActual().getNombreEstado().equalsIgnoreCase("Ocupada")) {
+        if (h.getEstado().equalsIgnoreCase("Ocupado")) {
             h.setEstadoActual(new EstadoDisponible());
             h.mostrarEstado();
-
-            String estadoTexto = "Disponible";
-            EstadoHabitacion estado = EstadoHabitacionFactory.crearEstado(estadoTexto);
-            h.setEstadoActual(estado);
+            h.setEstado("Disponible");
             habitacionDao.actualizar(h);
 
             JOptionPane.showMessageDialog(null, "Check-Out realizado. Habitación ahora está DISPONIBLE.");
@@ -137,7 +124,7 @@ public class CheckInOutControlador implements ActionListener {
         }
 
         return Integer.parseInt(
-                vista.getCbxHabitacionPCK().getSelectedItem().toString().split(" - ")[0]
+            vista.getCbxHabitacionPCK().getSelectedItem().toString().split(" - ")[0]
         );
     }
 
@@ -154,3 +141,4 @@ public class CheckInOutControlador implements ActionListener {
         }
     }
 }
+

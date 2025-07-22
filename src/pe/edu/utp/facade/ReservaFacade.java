@@ -4,40 +4,51 @@
  */
 package pe.edu.utp.facade;
 
-import pe.edu.utp.dao.HabitacionDAO;
-import pe.edu.utp.dao.ReservaDAO;
+import javax.swing.JOptionPane;
+import pe.edu.utp.dao.HabitacionDao;
+import pe.edu.utp.dao.ReservaDao;
 import pe.edu.utp.modelo.Habitacion;
 import pe.edu.utp.modelo.Reserva;
-import pe.edu.utp.state.EstadoOcupada;
+import pe.edu.utp.state.EstadoReservada;
 
+/**
+ *
+ * @author USUARIO
+ */
 public class ReservaFacade {
 
-    private final ReservaDAO reservaDao;
-    private final HabitacionDAO habitacionDao;
+    private final ReservaDao reservaDao;
+    private final HabitacionDao habitacionDao;
 
-    public ReservaFacade(ReservaDAO reservaDao, HabitacionDAO habitacionDao) {
+    public ReservaFacade(ReservaDao reservaDao, HabitacionDao habitacionDao) {
         this.reservaDao = reservaDao;
         this.habitacionDao = habitacionDao;
     }
 
-    /**
-     * Realiza la reserva y actualiza el estado de la habitación.
-     * Devuelve true si ambos procesos fueron exitosos.
-     */
     public boolean hacerReserva(Reserva reserva) {
         try {
             boolean insertado = reservaDao.agregar(reserva);
-            if (!insertado) return false;
 
-            Habitacion habitacion = habitacionDao.buscarPorId(reserva.getIdHabitacion());
-            if (habitacion == null) return false;
+            if (!insertado) {
+                JOptionPane.showMessageDialog(null, "No se pudo registrar la reserva.");
+                return false;
+            }
 
-            habitacion.setEstadoActual(new EstadoOcupada());
+            Habitacion h = habitacionDao.buscarPorId(reserva.getIdHabitacion());
+            h.setEstadoActual(new EstadoReservada());
+            h.mostrarEstado();
+            h.setEstado("Reservado");
 
-            return habitacionDao.actualizar(habitacion);
+            boolean actualizada = habitacionDao.actualizar(h);
+
+            if (!actualizada) {
+                JOptionPane.showMessageDialog(null, "Reserva creada, pero no se actualizó la habitación.");
+            }
+
+            return true;
 
         } catch (Exception e) {
-            System.err.println("Error en hacerReserva(): " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error en el proceso de reserva: " + e.getMessage());
             return false;
         }
     }

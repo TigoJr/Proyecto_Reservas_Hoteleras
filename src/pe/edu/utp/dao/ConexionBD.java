@@ -16,7 +16,7 @@ public class ConexionBD {
     private static ConexionBD instancia;
     private Connection conexion;
 
-    private final String URL = "jdbc:mysql://localhost:3306/Reservas_Hoteleras";
+    private final String URL = "jdbc:mysql://localhost:3306/reservas_de_hotel";
     private final String USUARIO = "root";
     private final String CLAVE = "root";
 

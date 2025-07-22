@@ -15,17 +15,17 @@ public class Pago {
     private int idReserva;
     private double monto;
     private Date fecha;
-    private String metodoPago;
+    private String metodoP;
 
     public Pago() {
     }
 
-    public Pago(int idPago, int idReserva, double monto, Date fecha, String metodoPago) {
+    public Pago(int idPago, int idReserva, double monto, Date fecha, String metodoP) {
         this.idPago = idPago;
         this.idReserva = idReserva;
         this.monto = monto;
         this.fecha = fecha;
-        this.metodoPago = metodoPago;
+        this.metodoP = metodoP;
     }
 
     public int getIdPago() {
@@ -60,12 +60,12 @@ public class Pago {
         this.fecha = fecha;
     }
 
-    public String getMetodoPago() {
-        return metodoPago;
+    public String getMetodoP() {
+        return metodoP;
     }
 
-    public void setMetodoPago(String metodoP) {
-        this.metodoPago = metodoP;
+    public void setMetodoP(String metodoP) {
+        this.metodoP = metodoP;
     }
     
 }

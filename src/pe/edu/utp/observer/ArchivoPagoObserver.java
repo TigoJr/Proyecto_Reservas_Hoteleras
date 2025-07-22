@@ -23,7 +23,7 @@ public class ArchivoPagoObserver implements PagoObserver {
 
             pw.println("PAGO | Reserva #" + pago.getIdReserva()
                     + " | Monto: $" + pago.getMonto()
-                    + " | Método: " + pago.getMetodoPago()
+                    + " | Método: " + pago.getMetodoP()
                     + " | Fecha: " + pago.getFecha());
 
         } catch (IOException e) {

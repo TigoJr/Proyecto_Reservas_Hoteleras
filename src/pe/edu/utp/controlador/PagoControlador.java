@@ -12,9 +12,9 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import pe.edu.utp.dao.HabitacionDAO;
-import pe.edu.utp.dao.PagoDAO;
-import pe.edu.utp.dao.ReservaDAO;
+import pe.edu.utp.dao.HabitacionDao;
+import pe.edu.utp.dao.PagoDao;
+import pe.edu.utp.dao.ReservaDao;
 import pe.edu.utp.modelo.Habitacion;
 import pe.edu.utp.modelo.Pago;
 import pe.edu.utp.modelo.Reserva;
@@ -30,13 +30,13 @@ import pe.edu.utp.vista.PrincipalVista;
 public class PagoControlador implements ActionListener {
 
     private final PrincipalVista vista;
-    private final PagoDAO pagoDao;
-    private final ReservaDAO reservaDao;
-    private final HabitacionDAO habitacionDao;
+    private final PagoDao pagoDao;
+    private final ReservaDao reservaDao;
+    private final HabitacionDao habitacionDao;
     private final PagoObservable observable = new PagoObservable();
     private boolean bloqueado = false;
 
-    public PagoControlador(PrincipalVista vista, PagoDAO pagoDao, ReservaDAO reservaDao, HabitacionDAO habitacionDao) {
+    public PagoControlador(PrincipalVista vista, PagoDao pagoDao, ReservaDao reservaDao, HabitacionDao habitacionDao) {
         this.vista = vista;
         this.pagoDao = pagoDao;
         this.reservaDao = reservaDao;
@@ -100,7 +100,7 @@ public class PagoControlador implements ActionListener {
                 p.getIdReserva(),
                 p.getMonto(),
                 p.getFecha(),
-                p.getMetodoPago()
+                p.getMetodoP()
             });
         }
     }
@@ -136,7 +136,7 @@ public class PagoControlador implements ActionListener {
             pago.setIdReserva(idReserva);
             pago.setMonto(monto);
             pago.setFecha(fecha);
-            pago.setMetodoPago(metodo);
+            pago.setMetodoP(metodo);
 
             if (pagoDao.agregar(pago)) {
                 JOptionPane.showMessageDialog(null, "Pago registrado correctamente.");

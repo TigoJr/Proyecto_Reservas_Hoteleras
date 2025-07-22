@@ -12,11 +12,7 @@ public class EstadoDisponible implements EstadoHabitacion {
 
     @Override
     public void mostrarEstado() {
-        System.out.println("La habitación está disponible.");
+    System.out.println("Es estado de la habitacion esta disponible");
     }
-
-    @Override
-    public String getNombreEstado() {
-        return "Disponible";
-    }
+    
 }

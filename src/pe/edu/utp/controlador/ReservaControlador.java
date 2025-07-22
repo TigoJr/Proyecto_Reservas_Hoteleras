@@ -11,15 +11,13 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import pe.edu.utp.dao.ClienteDAO;
-import pe.edu.utp.dao.HabitacionDAO;
-import pe.edu.utp.dao.ReservaDAO;
+import pe.edu.utp.dao.ClienteDao;
+import pe.edu.utp.dao.HabitacionDao;
+import pe.edu.utp.dao.ReservaDao;
 import pe.edu.utp.facade.ReservaFacade;
-import pe.edu.utp.factory.EstadoReservaFactory;
 import pe.edu.utp.modelo.Cliente;
 import pe.edu.utp.modelo.Habitacion;
 import pe.edu.utp.modelo.Reserva;
-import pe.edu.utp.state.EstadoReserva;
 import pe.edu.utp.vista.PrincipalVista;
 
 /**
@@ -29,29 +27,29 @@ import pe.edu.utp.vista.PrincipalVista;
 public class ReservaControlador implements ActionListener {
 
     private final PrincipalVista vista;
-    private final ClienteDAO clienteDao;
-    private final HabitacionDAO habitacionDao;
-    private final ReservaDAO reservaDao;
+    private final ClienteDao clienteDao;
+    private final HabitacionDao habitacionDao;
+    private final ReservaDao reservaDao;
 
-    public ReservaControlador(PrincipalVista vista, ClienteDAO clienteDao, HabitacionDAO habitacionDao, ReservaDAO reservaDao) {
+    public ReservaControlador(PrincipalVista vista, ClienteDao clienteDao, HabitacionDao habitacionDao, ReservaDao reservaDao) {
         this.vista = vista;
         this.clienteDao = clienteDao;
         this.habitacionDao = habitacionDao;
         this.reservaDao = reservaDao;
-
+        
         agregarEventos();
-
+        
         cargarClientes();
         cargarHabitacionesDisponibles();
         cargarReservasEnTabla();
         vista.getTxtEstadoPR().setText("Confirmada");
     }
-
+    
     private void agregarEventos() {
         vista.getBtnReservarPR().addActionListener(this);
         vista.getBtnLimpiarPR().addActionListener(this);
     }
-
+    
     private void cargarClientes() {
         List<Cliente> clientes = clienteDao.listarTodos();
         vista.getCbxClientePR().removeAllItems();
@@ -64,7 +62,7 @@ public class ReservaControlador implements ActionListener {
         List<Habitacion> habitaciones = habitacionDao.listarTodas();
         vista.getCbxHabitacionPR().removeAllItems();
         for (Habitacion h : habitaciones) {
-            if (h.getEstadoActual().getNombreEstado().equalsIgnoreCase("Disponible")) {
+            if (h.getEstado().equalsIgnoreCase("Disponible")) {
                 vista.getCbxHabitacionPR().addItem(h.getIdHabitacion() + " - Hab. " + h.getNumero());
             }
         }
@@ -82,7 +80,7 @@ public class ReservaControlador implements ActionListener {
                 r.getIdHabitacion(),
                 r.getFechaInicio(),
                 r.getFechaFin(),
-                r.getEstadoActual().getNombreEstado()
+                r.getEstado()
             });
         }
     }
@@ -130,9 +128,7 @@ public class ReservaControlador implements ActionListener {
             r.setIdHabitacion(idHabitacion);
             r.setFechaInicio(fechaInicio);
             r.setFechaFin(fechaFin);
-
-            EstadoReserva estado = EstadoReservaFactory.crearEstado(estadoReserva);
-            r.setEstadoActual(estado);
+            r.setEstado(estadoReserva);
             r.setFechaReserva(fechaReservaHoy);
             System.out.println("[Controlador] Fecha reserva seteada: " + fechaReservaHoy);
 

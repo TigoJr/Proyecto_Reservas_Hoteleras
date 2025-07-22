@@ -17,7 +17,7 @@ public class VistaPagoObservable implements PagoObserver {
     public void notificar(Pago pago) {
         String mensaje = "Notificación: Pago de $" + pago.getMonto()
                 + " realizado para la reserva #" + pago.getIdReserva()
-                + " con método: " + pago.getMetodoPago();
+                + " con método: " + pago.getMetodoP();
 
         JOptionPane.showMessageDialog(null, mensaje, "Notificación de Pago", JOptionPane.INFORMATION_MESSAGE);
     }

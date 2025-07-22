@@ -13,7 +13,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
-import pe.edu.utp.dao.ClienteDAO;
+import pe.edu.utp.dao.ClienteDao;
 import pe.edu.utp.modelo.Cliente;
 import pe.edu.utp.vista.PrincipalVista;
 
@@ -23,12 +23,12 @@ import pe.edu.utp.vista.PrincipalVista;
  */
 public class GestionClienteControlador implements ActionListener, MouseListener {
 
-    private final ClienteDAO dao;
+    private final ClienteDao dao;
     private final Cliente modelo;
     private final PrincipalVista vista;
     private Cliente clienteSeleccionado;
 
-    public GestionClienteControlador(ClienteDAO dao, Cliente modelo, PrincipalVista vista) {
+    public GestionClienteControlador(ClienteDao dao, Cliente modelo, PrincipalVista vista) {
         this.dao = dao;
         this.modelo = modelo;
         this.vista = vista;

@@ -9,8 +9,5 @@ package pe.edu.utp.state;
  * @author USUARIO
  */
 public interface EstadoHabitacion {
-
-    void mostrarEstado();
-
-    String getNombreEstado();
+    public void mostrarEstado();
 }
