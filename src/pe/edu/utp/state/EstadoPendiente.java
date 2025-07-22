@@ -8,11 +8,15 @@ package pe.edu.utp.state;
  *
  * @author USUARIO
  */
-public class EstadoOcupado implements EstadoHabitacion{
+public class EstadoPendiente implements EstadoReserva {
 
     @Override
     public void mostrarEstado() {
-     System.out.println("Estado de la habitacion Ocupado");
+        System.out.println("La reserva está pendiente.");
     }
-    
+
+    @Override
+    public String getNombreEstado() {
+        return "Pendiente";
+    }
 }

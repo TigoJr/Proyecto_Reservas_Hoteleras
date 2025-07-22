@@ -8,7 +8,7 @@ package pe.edu.utp.state;
  *
  * @author USUARIO
  */
-public interface EstadoHabitacion {
+public interface EstadoReserva {
 
     void mostrarEstado();
 

@@ -11,9 +11,11 @@ import java.awt.event.MouseListener;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import pe.edu.utp.dao.HabitacionDao;
+import pe.edu.utp.dao.HabitacionDAO;
+import pe.edu.utp.factory.EstadoHabitacionFactory;
 import pe.edu.utp.factory.HabitacionFactory;
 import pe.edu.utp.modelo.Habitacion;
+import pe.edu.utp.state.EstadoHabitacion;
 import pe.edu.utp.vista.PrincipalVista;
 
 /**
@@ -22,11 +24,11 @@ import pe.edu.utp.vista.PrincipalVista;
  */
 public class GestionHabitacionControlador implements ActionListener, MouseListener {
 
-    private final HabitacionDao dao;
+    private final HabitacionDAO dao;
     private final PrincipalVista vista;
     private Habitacion habitacionSeleccionada;
 
-    public GestionHabitacionControlador(HabitacionDao dao, PrincipalVista vista) {
+    public GestionHabitacionControlador(HabitacionDAO dao, PrincipalVista vista) {
         this.dao = dao;
         this.vista = vista;
 
@@ -47,7 +49,7 @@ public class GestionHabitacionControlador implements ActionListener, MouseListen
 
     private void cargarTablaHabitaciones() {
         DefaultTableModel modeloTabla = (DefaultTableModel) vista.getTablaHabitaciones().getModel();
-        modeloTabla.setRowCount(0); // limpiar tabla
+        modeloTabla.setRowCount(0);
 
         List<Habitacion> lista = dao.listarTodas();
         for (Habitacion h : lista) {
@@ -55,7 +57,7 @@ public class GestionHabitacionControlador implements ActionListener, MouseListen
                 h.getIdHabitacion(),
                 h.getNumero(),
                 h.getTipo(),
-                h.getEstado(),
+                h.getEstadoActual().getNombreEstado(),
                 h.getPrecio()
             });
         }
@@ -128,7 +130,11 @@ public class GestionHabitacionControlador implements ActionListener, MouseListen
             h.setIdHabitacion(Integer.parseInt(vista.getTxtIdPH().getText()));
             h.setNumero(Integer.parseInt(vista.getTxtNumeroPH().getText()));
             h.setTipo(vista.getCbxTipoPH().getSelectedItem().toString());
-            h.setEstado(vista.getCbxEstadoPH().getSelectedItem().toString());
+            
+            String estadoSeleccionado = vista.getCbxEstadoPH().getSelectedItem().toString();
+            EstadoHabitacion estado = EstadoHabitacionFactory.crearEstado(estadoSeleccionado);
+            
+            h.setEstadoActual(estado);
             h.setPrecio(Double.parseDouble(vista.getTxtPrecioPH().getText()));
 
             if (dao.actualizar(h)) {
@@ -172,7 +178,7 @@ public class GestionHabitacionControlador implements ActionListener, MouseListen
                     vista.getTxtIdPH().setText(String.valueOf(h.getIdHabitacion()));
                     vista.getTxtNumeroPH().setText(String.valueOf(h.getNumero()));
                     vista.getCbxTipoPH().setSelectedItem(h.getTipo());
-                    vista.getCbxEstadoPH().setSelectedItem(h.getEstado());
+                    vista.getCbxEstadoPH().setSelectedItem(h.getEstadoActual().getNombreEstado());
                     vista.getTxtPrecioPH().setText(String.valueOf(h.getPrecio()));
                     return;
                 }

@@ -5,33 +5,28 @@
 package pe.edu.utp.factory;
 
 import pe.edu.utp.modelo.Habitacion;
+import pe.edu.utp.state.EstadoDisponible;
 
 /**
  *
  * @author USUARIO
  */
 public class HabitacionFactory {
-    
-  public static Habitacion crearHabitacion(String tipo) {
+
+    public static Habitacion crearHabitacion(String tipo) {
         Habitacion h = new Habitacion();
         h.setTipo(tipo);
 
         switch (tipo.toLowerCase()) {
-            case "simple":
-                h.setPrecio(50.00);
-                break;
-            case "doble":
-                h.setPrecio(80.00);
-                break;
-            case "suite":
-                h.setPrecio(150.00);
-                break;
-            default:
-                h.setPrecio(0.00); // tipo desconocido
-                break;
+            case "Simple" -> h.setPrecio(50.00);
+            case "doble" -> h.setPrecio(80.00);
+            case "suite" -> h.setPrecio(150.00);
+            default -> h.setPrecio(0.00);
         }
 
-        h.setEstado("Disponible"); // estado por defecto
+        h.setEstadoActual(new EstadoDisponible());
+
         return h;
-    }  
+    }
 }
+

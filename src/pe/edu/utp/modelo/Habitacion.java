@@ -6,29 +6,25 @@ package pe.edu.utp.modelo;
 
 import pe.edu.utp.state.EstadoHabitacion;
 
-/**
- *
- * @author USUARIO
- */
 public class Habitacion {
 
     private int idHabitacion;
     private int numero;
     private String tipo;
-    private String estado;
     private double precio;
+    private EstadoHabitacion estadoActual;
 
     public Habitacion() {
     }
 
-    public Habitacion(int idHabitacion, int numero, String tipo, String estado, double precio) {
+    public Habitacion(int idHabitacion, int numero, String tipo, double precio, EstadoHabitacion estadoActual) {
         this.idHabitacion = idHabitacion;
         this.numero = numero;
         this.tipo = tipo;
-        this.estado = estado;
         this.precio = precio;
+        this.estadoActual = estadoActual;
     }
-
+    
     public int getIdHabitacion() {
         return idHabitacion;
     }
@@ -53,14 +49,6 @@ public class Habitacion {
         this.tipo = tipo;
     }
 
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
     public double getPrecio() {
         return precio;
     }
@@ -69,7 +57,9 @@ public class Habitacion {
         this.precio = precio;
     }
 
-    private EstadoHabitacion estadoActual;
+    public EstadoHabitacion getEstadoActual() {
+        return estadoActual;
+    }
 
     public void setEstadoActual(EstadoHabitacion estadoActual) {
         this.estadoActual = estadoActual;
@@ -81,6 +71,5 @@ public class Habitacion {
         } else {
             System.out.println("Estado no definido.");
         }
-
     }
 }

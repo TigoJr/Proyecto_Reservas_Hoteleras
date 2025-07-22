@@ -8,11 +8,15 @@ package pe.edu.utp.state;
  *
  * @author USUARIO
  */
-public class EstadoReservada implements EstadoHabitacion{
+public class EstadoConfirmada implements EstadoReserva {
 
     @Override
     public void mostrarEstado() {
-      System.out.println("Estado de habitacion esta en Reserva");
+        System.out.println("La reserva ha sido confirmada.");
     }
-    
+
+    @Override
+    public String getNombreEstado() {
+        return "Confirmada";
+    }
 }

@@ -5,33 +5,30 @@
 package pe.edu.utp.modelo;
 
 import java.util.Date;
+import pe.edu.utp.state.EstadoReserva;
 
-/**
- *
- * @author USUARIO
- */
 public class Reserva {
+
     private int idReserva;
     private int idCliente;
     private int idHabitacion;
     private Date fechaInicio;
     private Date fechaFin;
-    private String estado;
     private Date fechaReserva;
+
+    private EstadoReserva estadoActual;
 
     public Reserva() {
     }
-    
-    
 
-    public Reserva(int idReserva, int idCliente, int idHabitacion, Date fechaInicio, Date fechaFin, String estado, Date fechaReserva) {
+    public Reserva(int idReserva, int idCliente, int idHabitacion, Date fechaInicio, Date fechaFin, Date fechaReserva, EstadoReserva estadoActual) {
         this.idReserva = idReserva;
         this.idCliente = idCliente;
         this.idHabitacion = idHabitacion;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
-        this.estado = estado;
         this.fechaReserva = fechaReserva;
+        this.estadoActual = estadoActual;
     }
 
     public int getIdReserva() {
@@ -74,14 +71,6 @@ public class Reserva {
         this.fechaFin = fechaFin;
     }
 
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }    
-
     public Date getFechaReserva() {
         return fechaReserva;
     }
@@ -90,4 +79,23 @@ public class Reserva {
         this.fechaReserva = fechaReserva;
     }
     
+    public EstadoReserva getEstadoActual() {
+        return estadoActual;
+    }
+
+    public void setEstadoActual(EstadoReserva estadoActual) {
+        this.estadoActual = estadoActual;
+    }
+
+    public void mostrarEstado() {
+        if (estadoActual != null) {
+            estadoActual.mostrarEstado();
+        } else {
+            System.out.println("Estado no definido.");
+        }
+    }
+
+    public String getNombreEstado() {
+        return (estadoActual != null) ? estadoActual.getNombreEstado() : null;
+    }
 }

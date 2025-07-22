@@ -1040,7 +1040,7 @@ public class PrincipalVista extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(20, 5, 4, 50);
         panelHabitaciones.add(cbxTipoPH, gridBagConstraints);
 
-        cbxEstadoPH.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Disponible", "Reservado", "Ocupado" }));
+        cbxEstadoPH.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Disponible", "Ocupada", "Mantenimiento" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;

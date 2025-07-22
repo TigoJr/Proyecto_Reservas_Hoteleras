@@ -19,10 +19,10 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import pe.edu.utp.dao.ClienteDao;
-import pe.edu.utp.dao.HabitacionDao;
-import pe.edu.utp.dao.PagoDao;
-import pe.edu.utp.dao.ReservaDao;
+import pe.edu.utp.dao.ClienteDAO;
+import pe.edu.utp.dao.HabitacionDAO;
+import pe.edu.utp.dao.PagoDAO;
+import pe.edu.utp.dao.ReservaDAO;
 import pe.edu.utp.estilo.BotonLateralConLabel;
 import pe.edu.utp.estilo.Estilos;
 import pe.edu.utp.estilo.PaletaColores;
@@ -56,17 +56,17 @@ public class PrincipalControlador implements ActionListener {
     }
 
     private void initControladores() {
-        ClienteDao clienteDao = new ClienteDao();
+        ClienteDAO clienteDAO = new ClienteDAO();
         Cliente cliente = new Cliente();
-        HabitacionDao habitacionDao = new HabitacionDao();
-        ReservaDao reservaDao = new ReservaDao();
-        PagoDao pagoDao = new PagoDao();
+        HabitacionDAO habitacionDAO = new HabitacionDAO();
+        ReservaDAO reservaDao = new ReservaDAO();
+        PagoDAO pagoDao = new PagoDAO();
 
-        new GestionHabitacionControlador(habitacionDao, vista);
-        new ReservaControlador(vista, clienteDao, habitacionDao, reservaDao);
-        new GestionClienteControlador(clienteDao, cliente, vista);
-        new PagoControlador(vista, pagoDao, reservaDao, habitacionDao);
-        new CheckInOutControlador(habitacionDao, vista);
+        new GestionHabitacionControlador(habitacionDAO, vista);
+        new ReservaControlador(vista, clienteDAO, habitacionDAO, reservaDao);
+        new GestionClienteControlador(clienteDAO, cliente, vista);
+        new PagoControlador(vista, pagoDao, reservaDao, habitacionDAO);
+        new CheckInOutControlador(habitacionDAO, vista);
     }
 
     @Override
